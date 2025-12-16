@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 import asyncio
+import sys
 
 
 load_dotenv()
@@ -28,11 +29,12 @@ async def on_ready():
 async def load_extensions():
     cog_files = ["Moderation", "Greetings", "Music"]  # Add your cog filenames here without the .py extension
     for extension in cog_files:
+        module_path = f"cogs.{extension}"
         try:
-            await bot.load_extension(f'cogs.{extension}')
-            print(f"Loaded extension: {extension}")
+            await bot.load_extension(f'cogs.{module_path}')
+            print(f"Loaded extension: {module_path}")
         except Exception as e:
-            print(f"Failed to load extension {extension}. Error: {e}")
+            print(f"Failed to load extension {module_path}. Error: {e}", file=sys.stderr)
 
 
 
