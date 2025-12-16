@@ -29,10 +29,10 @@ class Music(commands.Cog):
 
                 elif guild_id in self.queues:
                     del self.queues[guild_id]
-                    await ctx.send("Queue finished. Disconnecting in 60 seconds..." delere_after=60)
+                    await ctx.send("Queue finished. Disconnecting in 60 seconds...", delere_after=60)
                     await asyncio.sleep(60)
                     if ctx.voice_client and not ctx.voice_client.is_playing():
-                        await ctx.voice_client.discord()
+                        await ctx.voice_client.disconnect()
 
             self.bot.loop.call_soon_threadsafe(self.bot.loop.create_task, play_next())
         return check_queue
@@ -147,5 +147,5 @@ async def stop(self ,ctx):
 
 
 # ----- Function Cog Loading-----
-async def setip(bot):
+async def setup(bot):
     await bot.add_cog(Music(bot))
