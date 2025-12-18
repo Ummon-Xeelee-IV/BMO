@@ -22,11 +22,10 @@ class Moderation(commands.Cog):
     
     @kick.error
     async def kick_error(self, ctx, error):
-        if isinstance(error, BotMissingPermissions):
+        if isinstance(error, commands.BotMissingPermissions):
             await ctx.send("You do not have permission to kick members.")
         elif isinstance(error, commands.MissingRequiredArgument):
             await ctx.send("Please mention a member to kick (`!kick @User` ).")
-
 
 
     # Ban Command
@@ -67,4 +66,5 @@ async def setup(bot):
 
 
     
+
 
