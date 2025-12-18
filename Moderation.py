@@ -28,12 +28,14 @@ class Moderation(commands.Cog):
             await ctx.send("Please mention a member to kick (`!kick @User` ).")
 
 
-    # Ban Command
-    @commands.command(help="Bans a member from the server.")
-    @bot_has_permissions(ban_members=True)
+    @commands.hybrid_command(name="ban", help="bans a member from the server.")
+    @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member: discord.Member, *, reason=None):
-        await member.ban(reason=reason)
-        await ctx.send(f"User {member.display_name} has been banned from the server. Reason: {reason or "None"}")
+        try:
+            await member.ban(reason=reason)
+            await ctx.send(f"User {member.display_name} has been banned from the server. Reason: {reason or ""}")
+        except discord.Forbidden:
+            await ctx.send("Missing permission to banm the user")
 
     @ban.error
     async def unban_error(ctx, error):
@@ -66,5 +68,6 @@ async def setup(bot):
 
 
     
+
 
 
