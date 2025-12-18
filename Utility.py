@@ -52,9 +52,27 @@ class Utility(commands.Cog):
         await ctx.send(embed=embed)
 
 
+    # --- Direct Message Command ---
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        message_content = f"Hi {member.mention}, welcome to the server"
+        embed = discord.Embed(
+            title="Server Welcome",
+            description=message_content,
+            color=discord.Color.blue()
+        )
+        try:
+            await member.send(embed=embed)
+            print(f"Sent a welcome message to {member.name}.")
+        except discord.Forbidden:
+            print(f"Could not send a message to {member.name}, they may have DMs disabled.")
 
-def setup(bot):
-    bot.add_cog(Greetings(bot))
+
+# The setup function is critical for discord.py to load the cog
+async def setup(bot):
+    await bot.add_cog(Utility(bot))
+
+
 
 
 
