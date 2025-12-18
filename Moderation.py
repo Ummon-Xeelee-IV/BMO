@@ -43,31 +43,43 @@ class Moderation(commands.Cog):
             await ctx.send("You do not have permission to ban members.")
         
     
-    # Unban Command
-    @commands.command(help="Unbans a member from the server.")
-    @bot_has_permissions(ban_members=True)
-    async def unban(self, ctx, *, member_indentifier):
+
+    @commands.command(name="Unban")
+    @commands.has_permissions(unban_members=True)
+    async def unban(self, ctx, *, member_name: str):
         baned_users = await ctx.guild.bans()
-        try:
-            member_name, member_discriminator = member_indentifier.split('#')
-        except ValueError:
-            return await ctx.send(" Invalid format. Please use the format (`Username#1234`)")
+        #geting the list of banned entries
+        bans = [entry async for entry in ctx.guild.bans()]
         
+        search_name = member_name.replace("@", "").lower()
+
         for ban_entry in baned_users:
             user = ban_entry.user
-
-            if (user.name, user.discriminator) == (member_name, member_discriminator):
+            if user.name.lower() == search_name or str(user).lower() == search_name:
                 await ctx.guild.unban(user)
-                await ctx.send(f"User {user} has been unbanned.")
+                await ctx.send(f"{user.name} has been unbanned.")
                 return
-            
-        await ctx.send(f"Coild not find baned user: {member_indentifier}")
+        await ctx.send(f"Could not find a banned user: {member_name}")
+
+
+
+    @app_commands.command(name="unban_id", description="Unban someone using their User ID")
+    @app_commands.checks.has_permissions(unban_members=True)
+    async def unban_id(self, interaction: discord.Interaction, user_id: str):
+        await interaction.response.defer(ephemeral=True)
+        try:
+            user = await self.bot.fetch_user(int(user_id))
+            await interaction.guild.unban(user)
+            await interaction.followup.send(f"Unbanned {user.name}")
+        except Exception as e:
+            await interaction.followup.send(f"Failed to unban ID {user_id}. Erro: {e}")
 
 async def setup(bot):
     await bot.add_cog(Moderation(bot))
 
 
     
+
 
 
 
