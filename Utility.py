@@ -37,8 +37,25 @@ class Utility(commands.Cog):
                 await self.bot.process_commands(message)
 
 
+
+    # --- Embed Command ---
+    @commands.command(help="Displays a sample embedded message.")
+    async def embed(self, ctx):
+        embed = discord.Embed(
+            title="Sample Embed", 
+            description="This is an example of an embedded message.", 
+            color=discord.Color.green() # Use discord.Color constants
+        )
+        embed.set_author(name=self.bot.user.display_name, icon_url=self.bot.user.display_avatar.url)
+        embed.add_field(name="Field 1", value="Value 1.", inline=False)
+        embed.set_footer(text="Bot Utilities")
+        await ctx.send(embed=embed)
+
+
+
 def setup(bot):
     bot.add_cog(Greetings(bot))
+
 
 
 
