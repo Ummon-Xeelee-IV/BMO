@@ -4,7 +4,9 @@ from discord.ext import commands
 from dotenv import load_dotenv
 import asyncio
 import sys
+from database import Database
 
+db = Database()
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -23,15 +25,18 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online,
          activity=discord.Activity(type=discord.ActivityType.listening, name="your commands!" )
     )
-    print(f"{bot.user} is online!")
+    print(f"--- BMO ONLINE ---")
+    print(f"Logged in as: {bot.user}")
+    print(f"ID: {bot.user.id}")
+    print(f"------------------")
 
 
 async def load_extensions():
-    cog_files = ["Moderation", "Greetings", "Music"]  # Add your cog filenames here without the .py extension
+    cog_files = ["Moderation_2", "Utility", "Logging", "Automation"]  # Add your cog filenames here without the .py extension
     for extension in cog_files:
         module_path = f"cogs.{extension}"
         try:
-            await bot.load_extension(f'cogs.{module_path}')
+            await bot.load_extension(module_path)
             print(f"Loaded extension: {module_path}")
         except Exception as e:
             print(f"Failed to load extension {module_path}. Error: {e}", file=sys.stderr)
@@ -52,4 +57,3 @@ if __name__ == '__main__':
         print("\nShutting down BMO...")
     except Exception as e:
         print(f"Bot terminated with an error: {e}")
-
