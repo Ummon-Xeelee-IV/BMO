@@ -8,15 +8,15 @@ class Logging(commands.Cog):
 
     async def emit_log(self, guild, embed):
         """Helper method to find the log channel and send the embed."""
-        # Professional bots look for a channel named 'mod-logs' or a saved ID in the DB
         # For this version, we search for a channel by name.
-        log_channel = discord.utils.get(guild.text_channels, name="mod-logs")
-        
+        log_channel = discord.utils.get(guild.text_channels, name = "mod=logs")
+
         if log_channel:
             try:
-                await log_channel.send(embed=embed)
+                await log_channel.send(embed = embed)
             except discord.Forbidden:
-                print(f"Missing permissions to post in #mod-logs in {guild.name}")
+                print(f"Missing permision to post in #mod-logs in {guild.name}")
+
 
     # Example of an automatic listener: Logs deleted messages
     @commands.Cog.listener()
@@ -36,4 +36,5 @@ class Logging(commands.Cog):
         await self.emit_log(message.guild, embed)
 
 async def setup(bot):
+
     await bot.add_cog(Logging(bot))
